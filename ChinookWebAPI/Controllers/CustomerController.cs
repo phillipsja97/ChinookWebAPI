@@ -9,7 +9,7 @@ using ChinookWebAPI.Models;
 
 namespace ChinookWebAPI.Controllers
 {
-    [Route("api/customer")]
+    [Route("api/customers")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
@@ -26,5 +26,6 @@ namespace ChinookWebAPI.Controllers
             }
             return Ok(customers);
         }
+        
     }
 }
