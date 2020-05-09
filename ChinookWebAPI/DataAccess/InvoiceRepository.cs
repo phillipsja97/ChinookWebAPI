@@ -27,7 +27,7 @@ namespace ChinookWebAPI.DataAccess
             }
         }
 
-        public List<InvoiceTotalByCountry> GetInvoicetotalPerCountry()
+        public List<InvoiceTotalFromCountry> GetInvoicetotalPerCountry()
         {
             var sql = @"
                 select Invoice.BillingCountry as Country, Sum(Invoice.Total) as TotalSales
@@ -36,11 +36,34 @@ namespace ChinookWebAPI.DataAccess
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var invoices = db.Query<InvoiceTotalByCountry>(sql).ToList();
+                var invoices = db.Query<InvoiceTotalFromCountry>(sql).ToList();
                 return invoices;
             }
         }
 
+        public IEnumerable<InvoiceWithCustomerAndTrackInfo> GetInnvoicesWithCustomersInfo()
+        {
+            var sql = @" 
+                select i.InvoiceId, c.CustomerId, i.InvoiceDate, i.Total as InvoiceTotal, c.FirstName + ' ' + c.LastName as FullName
+                    from Invoice i
+                        join customer c
+                            on i.customerId = c.customerId
+                       ";
+            var invoiceLineQuery = "select trackId, invoiceId from InvoiceLine";
 
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.Query<InvoiceWithCustomerAndTrackInfo>(sql).ToList();
+                var invoiceLines = db.Query<InvoiceTrack>(invoiceLineQuery);
+
+                foreach (var info in result)
+                {
+                    info.Tracks = invoiceLines.Where(il => il.InvoiceId == info.InvoiceId).Select(il => il.TrackId);
+                }
+                return result;
+            }
+
+        }
     }
 }
+

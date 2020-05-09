@@ -16,9 +16,25 @@ namespace ChinookWebAPI.Models
         public int Total { get; set; }
     }
 
-    public class InvoiceTotalByCountry
+    public class InvoiceTotalFromCountry
     {
         public string Country { get; set; }
         public decimal TotalSales { get; set; }
+    }
+
+    public class InvoiceWithCustomerAndTrackInfo
+    {
+        public int InvoiceId { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime InvoiceDate { get; set; }
+        public decimal InvoiceTotal { get; set; }
+        public string FullName { get; set; }
+        public IEnumerable<int> Tracks { get; set; }
+    }
+
+    public class InvoiceTrack
+    {
+        public int TrackId { get; set; }
+        public int InvoiceId { get; set; }
     }
 }
