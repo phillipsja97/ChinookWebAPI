@@ -20,5 +20,13 @@ namespace ChinookWebAPI.Controllers
             var invoices = repo.GetInvoiceTotalForYear(year);
             return Ok(invoices);
         }
+
+        [HttpGet("total/countries")]
+        public IActionResult GetInvoiceTotalPerCountry()
+        {
+            var repo = new InvoiceRepository();
+            var invoices = repo.GetInvoicetotalPerCountry();
+            return Ok(invoices);
+        }
     }
 }

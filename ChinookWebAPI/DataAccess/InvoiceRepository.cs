@@ -26,5 +26,21 @@ namespace ChinookWebAPI.DataAccess
                 return invoices;
             }
         }
+
+        public List<InvoiceTotalByCountry> GetInvoicetotalPerCountry()
+        {
+            var sql = @"
+                select Invoice.BillingCountry as Country, Sum(Invoice.Total) as TotalSales
+                    from Invoice
+                        group by Invoice.BillingCountry";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var invoices = db.Query<InvoiceTotalByCountry>(sql).ToList();
+                return invoices;
+            }
+        }
+
+
     }
 }

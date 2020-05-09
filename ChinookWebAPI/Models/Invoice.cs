@@ -15,4 +15,10 @@ namespace ChinookWebAPI.Models
         public string BillingPostalCode { get; set; }
         public int Total { get; set; }
     }
+
+    public class InvoiceTotalByCountry
+    {
+        public string Country { get; set; }
+        public decimal TotalSales { get; set; }
+    }
 }
