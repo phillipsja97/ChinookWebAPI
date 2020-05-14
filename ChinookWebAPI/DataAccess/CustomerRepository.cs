@@ -28,11 +28,22 @@ namespace ChinookWebAPI.DataAccess
             }
         }
 
-        // Provide a query showing only the Employees who are Sales Agents.
+        public List<CustomersByCountry> GetCustomersAndInvoiceByCountry(string country)
+        {
+            var sql = @"
+                        select CONCAT(Customer.firstName, ' ', Customer.LastName) as FullName, Invoice.InvoiceId as InvoiceId, Invoice.InvoiceDate as InvoiceDate, Invoice.BillingCountry as BillingCountry
+                            from Customer
+	                            join Invoice
+	                                on Customer.CustomerId = Invoice.CustomerId
+	                                    where Invoice.BillingCountry = @Country";
 
-       
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { Country = country };
+                var result = db.Query<CustomersByCountry>(sql, parameters).ToList();
 
-
-
+                return result;
+            }
+        }
     }
 }

@@ -12,4 +12,12 @@ namespace ChinookWebAPI.Models
         public int CustomerId { get; internal set; }
         public string Country { get; internal set; }
     }
+
+    public class CustomersByCountry
+    {
+        public string FullName { get; set; }
+        public int InvoiceId { get; set; }
+        public string InvoiceDate { get; set; }
+        public string BillingCountry { get; set; }
+    }
 }
