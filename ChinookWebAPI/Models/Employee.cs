@@ -27,6 +27,13 @@ namespace ChinookWebAPI.Models
     public class SalesAgentsInvoices
     {
         public string FullName { get; set; }
+        public int AgentId { get; set; }
+        public IEnumerable<int> Invoices { get; set; }
+    }
+
+    public class InvoicesForAgents
+    {
         public int InvoiceId { get; set; }
+        public int SupportRepId { get; set; }
     }
 }

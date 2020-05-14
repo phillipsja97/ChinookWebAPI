@@ -29,15 +29,23 @@ namespace ChinookWebAPI.DataAccess
         public List<SalesAgentsInvoices> GetSalesAgentsInvoices()
         {
             var sql = @"
-                        select CONCAT(Employee.FirstName, Employee.LastName) as FullName, Invoice.InvoiceId
+                        select CONCAT(Employee.FirstName, Employee.LastName) as FullName, Employee.EmployeeId as AgentId
                             from Employee
-	                            join Customer on Customer.SupportRepId = Employee.EmployeeId
-                                    join Invoice on Invoice.InvoiceId = Customer.CustomerId";
-
+                               where Employee.Title like 'Sales Support%'";
+                
+            var invoiceReps = @"select invoice.invoiceId, Customer.SupportRepId 
+                                from Invoice
+                                    join Customer on Invoice.InvoiceId = Customer.CustomerId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
                 var result = db.Query<SalesAgentsInvoices>(sql).ToList();
+                var theInvoices = db.Query<InvoicesForAgents>(invoiceReps);
+
+                foreach (var info in result)
+                {
+                    info.Invoices = theInvoices.Where(li => li.SupportRepId == info.AgentId).Select(x => x.InvoiceId);
+                }
                 return result;
             }
         }
