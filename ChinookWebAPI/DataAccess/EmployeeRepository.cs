@@ -26,6 +26,22 @@ namespace ChinookWebAPI.DataAccess
             }
         }
 
+        public List<SalesAgentsInvoices> GetSalesAgentsInvoices()
+        {
+            var sql = @"
+                        select CONCAT(Employee.FirstName, Employee.LastName) as FullName, Invoice.InvoiceId
+                            from Employee
+	                            join Customer on Customer.SupportRepId = Employee.EmployeeId
+                                    join Invoice on Invoice.InvoiceId = Customer.CustomerId";
+
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.Query<SalesAgentsInvoices>(sql).ToList();
+                return result;
+            }
+        }
+
 
     }
 }

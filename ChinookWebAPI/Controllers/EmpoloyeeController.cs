@@ -25,5 +25,21 @@ namespace ChinookWebAPI.Controllers
             }
             return Ok(employees);
         }
+
+        // sales_agent_invoices.sql: Provide a query that shows the invoices associated with each sales agent.
+        // The resultant table should include the Sales Agent's full name.
+
+        [HttpGet("salesAgent/invoices")]
+        public IActionResult GetSalesAgentsInvoices()
+        {
+            var repo = new EmployeeRepository();
+            var employees = repo.GetSalesAgentsInvoices();
+
+            if (!employees.Any())
+            {
+                return NotFound();
+            }
+            return Ok(employees);
+        }
     }
 }
