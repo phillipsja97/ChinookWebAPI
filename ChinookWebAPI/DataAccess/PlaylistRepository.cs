@@ -26,5 +26,31 @@ namespace ChinookWebAPI.DataAccess
                 return playlists;
             }
         }
+
+        public List<PlaylistAndTracks> GetTheTracksInPlaylist()
+        {
+            var sql = @"select Playlist.Name as Playlist, Playlist.PlaylistId
+                            from Playlist
+	                            join PlaylistTrack
+		                            on Playlist.PlaylistId = PlaylistTrack.PlaylistId";
+
+            var tracks = @"select PlaylistTrack.TrackId, Playlist.PlaylistId
+                            from Playlist
+	                            join PlaylistTrack
+		                            on Playlist.PlaylistId = PlaylistTrack.PlaylistId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var playlists = db.Query<PlaylistAndTracks>(sql).ToList();
+                var songs = db.Query<Tracks>(tracks).ToList();
+
+                foreach (var info in playlists)
+                {
+                    info.Tracks = songs.Where(il => il.PlaylistId == info.PlaylistId).Select(il => il.TrackId);
+                }
+
+                return playlists;
+            }
+        }
     }
 }

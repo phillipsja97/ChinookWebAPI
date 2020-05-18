@@ -21,5 +21,13 @@ namespace ChinookWebAPI.Controllers
             var playlists = repo.GetPlaylistAndTracks();
             return Ok(playlists);
         }
+
+        [HttpGet("tracks")]
+        public IActionResult GetTheTracksInPlaylist()
+        {
+            var repo = new PlaylistRepository();
+            var playlist = repo.GetTheTracksInPlaylist();
+            return Ok(playlist);
+        }
     }
 }
